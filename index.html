@@ -2,7 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>معجم الطالب — Student Dictionary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -284,6 +287,155 @@ html[dir="ltr"] .btn-back:hover{transform:translateX(-3px)}
 .card-word{font-size:30px}
 .result-card{padding:20px}
 .card-actions-top{opacity:1}
+}
+
+/* ============ MOBILE-FIRST ENHANCEMENTS ============ */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,.nav-tab,.bento-card,.quiz-cat-card,.quiz-opt,.list-item,.suggestion-item,.syn-chip{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+@media (hover:none){
+.result-card:hover,.bento-card:hover,.quiz-cat-card:hover,.stat-card:hover,.wotd-bar:hover,.list-item:hover,.quiz-opt:hover:not(.disabled),.btn-primary:hover,.btn-secondary:hover,.btn-back:hover,.nav-tab:hover .tab-circle,.icon-btn:hover,.search-btn:hover,.card-actions-top button:hover,.wotd-actions button:hover{transform:none;box-shadow:none}
+.card-actions-top{opacity:1}
+.bento-card:active,.quiz-cat-card:active,.list-item:active,.quiz-opt:active:not(.disabled),.wotd-bar:active{transform:scale(.98);border-color:var(--accent)}
+.btn-primary:active,.btn-secondary:active,.btn-back:active,.search-btn:active,.icon-btn:active{transform:scale(.95)}
+}
+@media (max-width:768px){
+body{min-height:100vh;min-height:100dvh;padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+/* خلفية أخف على الجوال لتوفير البطارية */
+.ambient-bg::before,.ambient-bg .orb{animation:none}
+.ambient-bg .orb{filter:blur(60px);opacity:.28}
+.ambient-bg .orb-1{width:260px;height:260px}
+.ambient-bg .orb-2{width:200px;height:200px}
+
+/* الشريط العلوي: الشعار + الأزرار فقط */
+.navbar{padding:calc(8px + env(safe-area-inset-top,0px)) calc(14px + env(safe-area-inset-right,0px)) 8px calc(14px + env(safe-area-inset-left,0px));backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg-surface)}
+[data-theme="light"] .navbar{background:var(--bg-surface)}
+.nav-inner{flex-wrap:nowrap;justify-content:space-between;gap:10px}
+.brand-mark{width:32px;height:32px;font-size:17px}
+.brand-text{font-size:16px}
+.icon-btn{width:40px;height:40px}
+
+/* شريط التنقل السفلي */
+.nav-tabs{position:fixed;bottom:0;left:0;right:0;z-index:150;display:flex;flex-wrap:nowrap;justify-content:space-around;align-items:stretch;gap:0;background:var(--bg-surface);border-top:1px solid var(--border-strong);padding:6px calc(4px + env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) calc(4px + env(safe-area-inset-left,0px));box-shadow:0 -6px 24px rgba(0,0,0,.18)}
+.nav-tab{flex:1;min-width:0;gap:3px;font-size:10px;padding:2px 0;white-space:nowrap}
+.nav-tab>span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tab-circle{width:56px;height:30px;border-radius:16px;background:transparent;border:none;box-shadow:none}
+.nav-tab svg{width:21px;height:21px}
+.nav-tab:hover .tab-circle{transform:none;box-shadow:none;background:transparent}
+.nav-tab.active .tab-circle{transform:none;background:var(--accent-soft);color:var(--accent);box-shadow:none}
+.nav-tab.active{color:var(--accent);font-weight:700}
+.nav-badge{top:-4px;inset-inline-end:2px;min-width:16px;height:16px;font-size:9px}
+
+/* المحتوى */
+.container{padding:18px calc(14px + env(safe-area-inset-right,0px)) 24px calc(14px + env(safe-area-inset-left,0px))}
+.hero{padding:20px 4px 22px}
+.hero h1{font-size:clamp(34px,10vw,46px);margin-bottom:10px}
+.hero p{font-size:14.5px;margin:0 auto 22px;line-height:1.7}
+.search-box{padding:4px 4px 4px 10px}
+.search-icon{width:34px}
+.search-box input{padding:12px 6px;font-size:16px;min-width:0}
+.search-btn{width:44px;height:44px;flex-shrink:0}
+.suggestions{max-height:45vh;max-height:45dvh;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.suggestion-item{padding:13px 14px;font-size:16px;min-height:46px}
+.suggestion-item .arrow{opacity:.6}
+
+/* كلمة اليوم */
+.wotd-bar{display:grid;grid-template-columns:1fr auto;grid-template-areas:"label actions" "content content";gap:8px 10px;align-items:center;padding:12px 14px;margin-bottom:18px}
+.wotd-label{grid-area:label;justify-self:start}
+.wotd-actions{grid-area:actions;gap:8px}
+.wotd-actions button{width:40px;height:40px;font-size:15px}
+.wotd-content{grid-area:content;width:100%}
+.wotd-word{font-size:19px}
+.wotd-trans{font-size:13.5px}
+.stats-row{gap:8px;margin-top:20px}
+.stat-card{padding:10px 6px}
+.stat-label{font-size:10px;letter-spacing:.02em}
+.stat-value{font-size:20px}
+.bento-grid{margin-top:22px;gap:10px;grid-template-columns:1fr 1fr}
+.bento-card{padding:14px}
+.bento-card .bento-icon{width:38px;height:38px;margin-bottom:8px}
+.bento-card h3{font-size:14px}
+.bento-card p{font-size:12px;line-height:1.5}
+
+/* النتائج والبطاقات */
+#results-container{margin-top:20px;gap:12px}
+.result-card{padding:16px;border-radius:14px}
+.card-top{margin-bottom:12px;gap:10px;flex-wrap:nowrap}
+.card-word-wrap{min-width:0;gap:6px 8px}
+.card-word{font-size:26px;line-height:1.15;overflow-wrap:anywhere;word-break:break-word}
+.card-phonetic{font-size:12px}
+.card-actions-top{opacity:1;flex-shrink:0}
+.card-actions-top button{width:40px;height:40px}
+.meaning-chips{gap:6px}
+.meaning-chip{padding:7px 12px;font-size:13.5px;line-height:1.5}
+.definition-block{padding:12px 14px}
+.mg-defs li{font-size:13.5px}
+.syn-chip{padding:5px 12px;font-size:12.5px}
+.page-head{margin-bottom:6px}
+.page-head h2,.list-header h2{font-size:24px}
+.page-sub{margin-bottom:14px}
+.filter-box{margin-bottom:14px}
+.phrase-grid{gap:10px}
+.empty-state{padding:44px 16px}
+.btn-secondary{padding:13px 30px;min-height:44px}
+.load-more-wrap{margin-top:20px}
+
+/* المفضلة والسجل */
+.list-header{gap:10px}
+.list-header .clear-btn{padding:9px 14px;min-height:38px}
+.list-item{padding:12px 14px;gap:10px}
+.list-item .word{font-size:18px;overflow-wrap:anywhere}
+.list-item .del-btn{width:40px;height:40px;font-size:18px;flex-shrink:0}
+
+/* الاختبار */
+.quiz-header{margin-bottom:18px}
+.quiz-header h2{font-size:26px;margin-bottom:8px}
+.quiz-header p{font-size:13.5px}
+.quiz-category-grid{margin:12px 0 20px}
+.quiz-cat-card{padding:18px 16px;border-radius:18px}
+.quiz-cat-icon{width:56px;height:56px;font-size:28px}
+.quiz-cat-card h3{font-size:21px}
+.quiz-cat-card .cat-desc{min-height:0;font-size:12.5px;margin-bottom:6px}
+.quiz-cat-card .btn-start{padding:12px 26px;min-height:44px;font-size:14px}
+.quiz-top-bar{margin-bottom:14px}
+.btn-back{padding:10px 16px;min-height:42px}
+.quiz-progress-bar{width:min(180px,40vw)}
+.quiz-stats-row{gap:8px;margin-bottom:16px}
+.quiz-stat{padding:8px 4px}
+.quiz-card{padding:22px 14px;border-radius:20px}
+.quiz-word{font-size:34px;overflow-wrap:anywhere;margin-bottom:20px}
+.quiz-word.is-phrase{font-size:22px}
+.quiz-options{gap:10px;margin-bottom:18px}
+.quiz-opt{padding:15px 14px;min-height:54px;font-size:15px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:12px}
+.btn-primary{min-height:50px;font-size:15px}
+
+/* شاشة التحميل */
+.loader-overlay{padding:24px calc(20px + env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) calc(20px + env(safe-area-inset-left,0px))}
+.loader-brand-text{font-size:26px}
+.loader-overlay .btn-primary{min-height:50px}
+
+/* الإشعارات فوق شريط التنقل */
+.toast-container{bottom:calc(88px + env(safe-area-inset-bottom,0px));width:calc(100% - 28px);max-width:420px;align-items:center}
+.toast{font-size:13.5px;padding:11px 18px;max-width:100%}
+::-webkit-scrollbar{width:4px;height:4px}
+}
+@media (max-width:360px){
+.nav-tab{font-size:9.5px}
+.tab-circle{width:48px}
+.hero h1{font-size:32px}
+.card-word{font-size:23px}
+.quiz-word{font-size:30px}
+.bento-grid{grid-template-columns:1fr}
+}
+@media (max-height:480px) and (orientation:landscape) and (max-width:900px){
+body{padding-bottom:calc(54px + env(safe-area-inset-bottom,0px))}
+.nav-tabs{padding-top:3px;padding-bottom:calc(3px + env(safe-area-inset-bottom,0px))}
+.nav-tab>span:last-child{display:none}
+.tab-circle{height:34px}
+.hero{padding-top:8px}
+.toast-container{bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 </style>
 </head>
@@ -940,6 +1092,27 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '☀️' : '🌙';
 
 initApp();
+
+// ===== تحسينات الجوال =====
+(function(){
+  const _sw = window.switchToPage;
+  if (typeof _sw === 'function') {
+    window.switchToPage = function(id){ const r = _sw.apply(this, arguments); window.scrollTo({top:0,behavior:'auto'}); return r; };
+  }
+  document.querySelectorAll('.nav-tab').forEach(b => b.addEventListener('click', () => window.scrollTo({top:0,behavior:'auto'})));
+  function syncThemeColor(){
+    const m = document.querySelector('meta[name="theme-color"]'); if(!m) return;
+    m.setAttribute('content', document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0a0a0b');
+  }
+  new MutationObserver(syncThemeColor).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  syncThemeColor();
+  // إخفاء لوحة المفاتيح عند الضغط على Enter / عند التمرير
+  ['searchInput','idiomSearch','slangSearch'].forEach(id => {
+    const el = document.getElementById(id); if(!el) return;
+    el.setAttribute('enterkeyhint','search'); el.setAttribute('autocapitalize','off'); el.setAttribute('autocorrect','off'); el.setAttribute('spellcheck','false');
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') el.blur(); });
+  });
+})();
 </script>
 </body>
 </html>
