@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>معجم الطالب — Student Dictionary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg-app:#0a0a0b;--bg-surface:#111113;--bg-elevated:#18181b;--bg-hover:#1f1f23;
+--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.14);--border-glow:rgba(129,140,248,0.4);
+--text-primary:#fafafa;--text-secondary:#a1a1aa;--text-muted:#52525b;
+--accent:#818cf8;--accent-strong:#6366f1;--accent-soft:rgba(129,140,248,0.12);--accent-glow:rgba(129,140,248,0.25);
+--success:#34d399;--danger:#f87171;
+--gradient-primary:linear-gradient(135deg,#818cf8 0%,#c084fc 50%,#f0abfc 100%);
+--gradient-mesh:radial-gradient(at 20% 30%,rgba(129,140,248,0.15) 0%,transparent 50%),radial-gradient(at 80% 70%,rgba(244,114,182,0.12) 0%,transparent 50%),radial-gradient(at 50% 50%,rgba(52,211,153,0.08) 0%,transparent 50%);
+--shadow-sm:0 1px 2px rgba(0,0,0,0.3);--shadow-md:0 4px 12px rgba(0,0,0,0.4);--shadow-lg:0 20px 40px rgba(0,0,0,0.5);--shadow-glow:0 0 40px rgba(129,140,248,0.3);
+--radius:16px;
+--font-ar:'Cairo',sans-serif;--font-en:'Inter',sans-serif;--font-serif:'Instrument Serif',serif;--font-mono:'JetBrains Mono',monospace;
+}
+[data-theme="light"]{
+--bg-app:#fafaf9;--bg-surface:#ffffff;--bg-elevated:#f4f4f5;--bg-hover:#e4e4e7;
+--border:rgba(0,0,0,0.08);--border-strong:rgba(0,0,0,0.14);--border-glow:rgba(99,102,241,0.5);
+--text-primary:#18181b;--text-secondary:#52525b;--text-muted:#a1a1aa;
+--accent:#6366f1;--accent-strong:#4f46e5;--accent-soft:rgba(99,102,241,0.1);--accent-glow:rgba(99,102,241,0.2);
+--shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-md:0 4px 12px rgba(0,0,0,0.08);--shadow-lg:0 20px 40px rgba(0,0,0,0.1);--shadow-glow:0 0 40px rgba(99,102,241,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-ar);background:var(--bg-app);color:var(--text-primary);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s}
+.ambient-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ambient-bg::before{content:'';position:absolute;inset:0;background:var(--gradient-mesh);animation:ambientShift 20s ease-in-out infinite}
+.ambient-bg .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;animation:orbFloat 15s ease-in-out infinite}
+.ambient-bg .orb-1{width:400px;height:400px;background:#818cf8;top:-100px;right:-100px}
+.ambient-bg .orb-2{width:300px;height:300px;background:#f0abfc;bottom:-50px;left:-50px;animation-delay:-5s}
+@keyframes ambientShift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-20px,20px) scale(1.05)}}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(40px,-30px)}66%{transform:translate(-30px,40px)}}
+
+.navbar{position:sticky;top:0;z-index:100;background:rgba(17,17,19,0.7);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);padding:14px 28px}
+[data-theme="light"] .navbar{background:rgba(255,255,255,0.8)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.brand-mark{width:36px;height:36px;border-radius:50%;background:var(--gradient-primary);display:grid;place-items:center;font-family:var(--font-ar);font-weight:800;font-size:19px;color:#fff;box-shadow:var(--shadow-glow);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.brand:hover .brand-mark{transform:scale(1.08) rotate(-8deg)}
+.brand-text{font-family:var(--font-ar);font-weight:800;font-size:18px}
+.brand-text .dot{color:var(--accent)}
+.nav-tabs{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+.nav-tab{background:transparent;border:none;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:var(--text-muted);font-family:var(--font-ar);font-size:11px;font-weight:600;transition:color .25s;position:relative}
+.tab-circle{width:48px;height:48px;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border);display:grid;place-items:center;color:var(--text-secondary);transition:all .35s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shadow-sm)}
+.nav-tab svg{width:19px;height:19px;stroke-width:2.2;transition:transform .3s}
+.nav-tab:hover{color:var(--text-secondary)}
+.nav-tab:hover .tab-circle{transform:translateY(-4px) scale(1.06);border-color:var(--border-strong);color:var(--text-primary);box-shadow:var(--shadow-md)}
+.nav-tab:hover svg{transform:scale(1.1)}
+.nav-tab:active .tab-circle{transform:scale(.92)}
+.nav-tab.active{color:var(--accent)}
+.nav-tab.active .tab-circle{background:var(--gradient-primary);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px var(--accent-glow),0 0 0 5px var(--accent-soft)}
+.nav-badge{position:absolute;top:-6px;inset-inline-end:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--gradient-primary);color:#fff;font-family:var(--font-en);font-size:10px;font-weight:700;display:grid;place-items:center;border:2px solid var(--bg-app)}
+.nav-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;display:grid;place-items:center;font-size:15px;transition:all .2s;font-family:var(--font-en);font-weight:600}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text-primary);border-color:var(--border-strong);transform:translateY(-1px)}
+.icon-btn.lang{font-size:11px;font-weight:700}
+
+.container{max-width:1200px;margin:0 auto;padding:32px 28px 80px;position:relative;z-index:1}
+.page{display:none;animation:pageIn .5s cubic-bezier(0.16,1,0.3,1)}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.hero{text-align:center;padding:48px 20px 40px;max-width:720px;margin:0 auto}
+.hero h1{font-family:var(--font-serif);font-size:clamp(40px,6vw,64px);font-weight:400;line-height:1.05;letter-spacing:-0.03em;margin-bottom:16px;font-style:italic}
+.hero h1 .accent-word{background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text-secondary);font-size:17px;max-width:520px;margin:0 auto 40px}
+.search-wrapper{position:relative;max-width:640px;margin:0 auto}
+.search-box{display:flex;align-items:center;background:var(--bg-surface);border:1.5px solid var(--border-strong);border-radius:100px;padding:6px 6px 6px 16px;transition:all .3s;box-shadow:var(--shadow-md)}
+.search-box:focus-within{border-color:var(--accent);box-shadow:var(--shadow-lg),0 0 0 4px var(--accent-soft)}
+.search-icon{width:44px;display:grid;place-items:center;color:var(--text-muted)}
+.search-icon svg{width:18px;height:18px}
+.search-box input{flex:1;background:transparent;border:none;padding:14px 8px;font-size:16px;color:var(--text-primary);font-family:var(--font-en);outline:none;direction:ltr;text-align:left}
+.search-box input::placeholder{color:var(--text-muted);font-family:var(--font-ar);direction:rtl;text-align:right}
+html[dir="ltr"] .search-box input::placeholder{direction:ltr;text-align:left;font-family:var(--font-en)}
+.search-shortcut{display:flex;align-items:center;padding:4px 10px;margin-right:6px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--font-mono);color:var(--text-muted)}
+.search-btn{background:var(--accent);border:none;width:48px;height:48px;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.search-btn svg{width:18px;height:18px}
+.search-btn:hover{background:var(--accent-strong);transform:scale(1.06);box-shadow:0 8px 16px var(--accent-glow)}
+.suggestions{position:absolute;top:calc(100% + 8px);right:0;left:0;background:var(--bg-surface);border:1px solid var(--border-strong);border-radius:14px;max-height:340px;overflow-y:auto;display:none;z-index:50;box-shadow:var(--shadow-lg);padding:6px}
+.suggestions.show{display:block;animation:dropdownIn .2s ease}
+@keyframes dropdownIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.suggestion-item{padding:10px 14px;cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:space-between;transition:background .15s;font-family:var(--font-en);font-size:15px;color:var(--text-primary)}
+.suggestion-item:hover{background:var(--bg-hover)}
+.suggestion-item .arrow{color:var(--accent);opacity:0;transition:opacity .2s}
+.suggestion-item:hover .arrow{opacity:1}
+
+.wotd-bar{max-width:640px;margin:0 auto 28px;display:flex;align-items:center;gap:14px;background:var(--bg-surface);border:1px solid var(--border);border-radius:20px;padding:10px 12px 10px 18px;box-shadow:var(--shadow-sm);transition:all .3s;text-align:right}
+html[dir="ltr"] .wotd-bar{text-align:left;padding:10px 18px 10px 12px}
+.wotd-bar:hover{border-color:var(--border-strong);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.wotd-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-glow);padding:6px 12px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+.wotd-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.wotd-line1{display:flex;align-items:center;gap:10px;min-width:0}
+.wotd-word{font-family:var(--font-serif);font-style:italic;font-size:20px;white-space:nowrap;flex-shrink:0}
+.wotd-sep{color:var(--text-muted);flex-shrink:0}
+.wotd-trans{color:var(--text-secondary);font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wotd-def{direction:ltr;font-family:var(--font-en);font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wotd-actions{display:flex;gap:6px;flex-shrink:0}
+.wotd-actions button{width:34px;height:34px;border-radius:50%;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;display:grid;place-items:center;font-size:13px;transition:all .2s}
+.wotd-actions button:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.1)}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:640px;margin:32px auto 0}
+.stat-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center;transition:all .2s}
+.stat-card:hover{border-color:var(--border-strong);transform:translateY(-2px)}
+.stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--font-en);font-weight:500;margin-bottom:4px}
+.stat-value{font-family:var(--font-serif);font-size:24px;color:var(--text-primary);font-style:italic}
+
+#results-container{max-width:800px;margin:32px auto 0;display:flex;flex-direction:column;gap:16px}
+.result-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;animation:cardIn .4s cubic-bezier(.16,1,0.3,1)}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.result-card::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%;background:var(--gradient-primary);opacity:0;transition:opacity .3s}
+html[dir="ltr"] .result-card::before{right:auto;left:0}
+.result-card:hover{border-color:var(--border-strong);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.result-card:hover::before{opacity:1}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:16px;flex-wrap:wrap}
+.card-word-wrap{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px}
+.card-word{font-family:var(--font-serif);font-size:38px;font-weight:400;letter-spacing:-0.02em;font-style:italic;line-height:1}
+.card-phonetic{font-family:var(--font-mono);font-size:14px;color:var(--text-muted);direction:ltr}
+.card-type{display:inline-flex;font-size:11px;font-weight:600;font-family:var(--font-en);color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--accent-glow);align-self:flex-start}
+.card-actions-top{display:flex;gap:6px;opacity:0;transition:opacity .2s}
+.result-card:hover .card-actions-top{opacity:1}
+.card-actions-top button{width:36px;height:36px;border-radius:50%;background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.card-actions-top button svg{width:15px;height:15px}
+.card-actions-top button:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.1)}
+.card-actions-top button.fav-active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.translation-section{margin-bottom:18px}
+.section-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--font-en);font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.meaning-chips{display:flex;flex-wrap:wrap;gap:8px}
+.meaning-chip{background:var(--bg-elevated);border:1px solid var(--border);padding:8px 14px;border-radius:100px;font-size:14px;font-weight:500;transition:all .2s;font-family:var(--font-ar)}
+.meaning-chip:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.definition-block{background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-top:10px}
+.mg-type{display:inline-flex;font-size:11px;font-weight:600;font-family:var(--font-en);color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--accent-glow);margin-bottom:8px}
+.mg-defs{margin:0;padding-inline-start:18px;display:flex;flex-direction:column;gap:6px}
+.mg-defs li{color:var(--text-secondary);font-size:14px;line-height:1.6;font-family:var(--font-en);direction:ltr;text-align:left}
+.mg-ex{display:block;color:var(--text-muted);font-style:italic;font-size:13px;margin-top:2px}
+.mg-syn{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.syn-label{font-size:11px;color:var(--text-muted);font-weight:600}
+.syn-chip{font-family:var(--font-en);direction:ltr;font-size:12px;color:var(--text-secondary);background:var(--bg-surface);border:1px solid var(--border);padding:2px 10px;border-radius:100px;cursor:pointer;transition:all .2s}
+.syn-chip:hover{border-color:var(--accent);color:var(--accent)}
+.empty-defs{color:var(--text-muted);font-size:13px}
+.skeleton{background:linear-gradient(90deg,var(--bg-elevated) 0%,var(--bg-hover) 50%,var(--bg-elevated) 100%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;display:inline-block}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.empty-state{text-align:center;padding:80px 20px;background:var(--bg-surface);border:1px dashed var(--border-strong);border-radius:var(--radius)}
+.empty-state .icon{font-size:48px;margin-bottom:16px;opacity:.5}
+.empty-state h3{font-family:var(--font-serif);font-size:24px;font-style:italic;margin-bottom:8px}
+.empty-state p{color:var(--text-secondary);font-size:14px}
+
+.bento-grid{max-width:900px;margin:40px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.bento-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all .3s;position:relative;overflow:hidden;cursor:pointer}
+.bento-card:hover{border-color:var(--border-strong);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.bento-card::before{content:'';position:absolute;inset:0;background:var(--gradient-mesh);opacity:0;transition:opacity .3s;pointer-events:none}
+.bento-card:hover::before{opacity:.4}
+.bento-card .bento-icon{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:12px;position:relative;z-index:1}
+.bento-card .bento-icon svg{width:18px;height:18px}
+.bento-card h3{font-size:15px;font-weight:600;margin-bottom:4px;position:relative;z-index:1}
+.bento-card p{font-size:13px;color:var(--text-secondary);position:relative;z-index:1}
+
+.page-head{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.page-head h2{font-family:var(--font-serif);font-size:32px;font-style:italic;font-weight:400}
+.count-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-en);font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-glow);padding:4px 12px;border-radius:100px}
+.page-sub{text-align:center;color:var(--text-muted);font-size:13px;margin-bottom:20px}
+.filter-box{max-width:640px;margin:0 auto 20px;position:relative}
+.phrase-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.load-more-wrap{text-align:center;margin:28px 0 0}
+.shown-count{display:block;color:var(--text-muted);font-size:12px;margin-bottom:12px;font-family:var(--font-en)}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text-secondary);padding:12px 32px;border-radius:100px;cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font-ar);transition:all .2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+.list-section{max-width:800px;margin:0 auto}
+.list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.list-header h2{font-family:var(--font-serif);font-size:32px;font-style:italic;font-weight:400}
+.list-header .clear-btn{background:transparent;border:1px solid var(--border);color:var(--text-secondary);padding:6px 14px;border-radius:100px;cursor:pointer;font-size:12px;font-family:var(--font-ar);font-weight:500;transition:all .2s}
+.list-header .clear-btn:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+.list-item{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;transition:all .2s;cursor:pointer;position:relative;overflow:hidden}
+.list-item:hover{border-color:var(--border-strong);transform:translateX(-4px);box-shadow:var(--shadow-md)}
+.list-item .word{font-family:var(--font-serif);font-size:20px;font-style:italic}
+.list-item .trans{color:var(--text-secondary);font-size:13px}
+.list-item .del-btn{background:transparent;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;transition:all .2s}
+.list-item .del-btn:hover{color:var(--danger)}
+
+/* ============ QUIZ - قسم الاختيار ============ */
+.quiz-container{max-width:880px;margin:0 auto}
+.quiz-header{text-align:center;margin-bottom:32px}
+.quiz-header h2{font-family:var(--font-serif);font-size:36px;font-style:italic;font-weight:400;margin-bottom:12px}
+.quiz-header p{color:var(--text-secondary);font-size:15px;max-width:420px;margin:0 auto}
+.quiz-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0 32px}
+.quiz-cat-card{background:var(--bg-surface);border:1.5px solid var(--border);border-radius:20px;padding:28px 22px;text-align:center;cursor:pointer;transition:all .35s cubic-bezier(.16,1,0.3,1);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px}
+.quiz-cat-card::before{content:'';position:absolute;inset:0;background:var(--gradient-mesh);opacity:0;transition:opacity .4s;pointer-events:none}
+.quiz-cat-card:hover{border-color:var(--accent);transform:translateY(-6px);box-shadow:0 20px 40px rgba(129,140,248,0.15)}
+.quiz-cat-card:hover::before{opacity:.5}
+.quiz-cat-icon{width:72px;height:72px;border-radius:50%;background:var(--accent-soft);border:2px solid var(--accent-glow);display:grid;place-items:center;font-size:36px;margin-bottom:8px;position:relative;z-index:1;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.quiz-cat-card:hover .quiz-cat-icon{transform:scale(1.12) rotate(-6deg)}
+.quiz-cat-card h3{font-family:var(--font-serif);font-size:24px;font-style:italic;font-weight:500;margin-bottom:2px;position:relative;z-index:1}
+.quiz-cat-card .en-title{font-family:var(--font-en);font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;position:relative;z-index:1}
+.quiz-cat-card .cat-desc{font-size:13px;color:var(--text-secondary);min-height:36px;line-height:1.5;margin-bottom:12px;position:relative;z-index:1}
+.quiz-cat-count{display:inline-flex;align-items:center;gap:6px;background:var(--bg-elevated);border:1px solid var(--border-strong);padding:6px 14px;border-radius:100px;font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:14px;position:relative;z-index:1;font-family:var(--font-ar)}
+.quiz-cat-count .num{color:var(--accent);font-family:var(--font-en);font-weight:700}
+.quiz-cat-card .btn-start{background:var(--accent);color:#fff;border:none;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-ar);transition:all .2s;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.quiz-cat-card .btn-start:hover{background:var(--accent-strong);transform:scale(1.05);box-shadow:0 8px 20px var(--accent-glow)}
+.quiz-cat-card.words .quiz-cat-icon{background:rgba(99,102,241,0.15);border-color:rgba(99,102,241,0.4)}
+.quiz-cat-card.idioms .quiz-cat-icon{background:rgba(192,132,252,0.15);border-color:rgba(192,132,252,0.4)}
+.quiz-cat-card.slang .quiz-cat-icon{background:rgba(52,211,153,0.15);border-color:rgba(52,211,153,0.4)}
+.quiz-cat-card.slang h3{color:var(--success)}
+.quiz-cat-card.idioms h3{color:#c084fc}
+
+/* شريط علوي للاختبار */
+.quiz-top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
+.btn-back{background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-secondary);padding:8px 18px;border-radius:100px;cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font-ar);transition:all .2s;display:flex;align-items:center;gap:6px}
+.btn-back:hover{border-color:var(--accent);color:var(--accent);transform:translateX(3px)}
+html[dir="ltr"] .btn-back:hover{transform:translateX(-3px)}
+.quiz-cat-badge{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-glow);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:700;font-family:var(--font-ar);letter-spacing:.05em}
+
+.quiz-progress{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;font-size:13px;color:var(--text-secondary);font-family:var(--font-en)}
+.quiz-progress-bar{width:200px;height:4px;background:var(--bg-elevated);border-radius:100px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:var(--gradient-primary);border-radius:100px;transition:width .4s ease}
+.quiz-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.quiz-stat{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.quiz-stat .label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--font-en);margin-bottom:4px}
+.quiz-stat .value{font-family:var(--font-serif);font-size:22px;font-style:italic}
+.quiz-stat.correct .value{color:var(--success)}
+.quiz-stat.wrong .value{color:var(--danger)}
+.quiz-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:24px;padding:40px 32px;text-align:center;box-shadow:var(--shadow-md)}
+.quiz-question-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-en);font-weight:500;margin-bottom:16px}
+.quiz-word{font-family:var(--font-serif);font-size:52px;font-weight:400;font-style:italic;background:var(--gradient-primary);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.02em;margin-bottom:32px;line-height:1;word-break:break-word}
+.quiz-word.is-phrase{font-size:32px;line-height:1.3}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.quiz-opt{background:var(--bg-elevated);border:1.5px solid var(--border);padding:18px 20px;border-radius:14px;cursor:pointer;font-size:15px;font-weight:500;transition:all .2s;font-family:var(--font-ar);line-height:1.5}
+.quiz-opt:hover:not(.disabled){border-color:var(--accent);background:var(--accent-soft);transform:translateY(-2px)}
+.quiz-opt.correct{background:rgba(52,211,153,.12);border-color:var(--success);color:var(--success)}
+.quiz-opt.wrong{background:rgba(248,113,113,.12);border-color:var(--danger);color:var(--danger)}
+.quiz-opt.disabled{pointer-events:none;opacity:.6}
+.btn-primary{background:var(--accent);color:#fff;border:none;padding:14px 32px;border-radius:100px;font-weight:600;cursor:pointer;font-size:14px;font-family:var(--font-ar);transition:all .2s;width:100%;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{background:var(--accent-strong);transform:translateY(-2px);box-shadow:0 12px 24px var(--accent-glow)}
+
+.loader-overlay{position:fixed;inset:0;background:var(--bg-app);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .5s,visibility .5s}
+.loader-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.loader-brand .brand-mark{width:56px;height:56px;font-size:26px}
+.loader-brand-text{font-family:var(--font-ar);font-weight:800;font-size:30px}
+.loader-brand-text .dot{color:var(--accent)}
+.loader-spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:24px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-overlay p{color:var(--text-secondary);font-size:15px;max-width:400px;margin-bottom:24px}
+.loader-overlay .btn-primary{width:auto;padding:12px 30px}
+.loader-status{font-size:12px;color:var(--text-muted);font-family:var(--font-mono);margin-top:16px}
+.toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--bg-surface);border:1px solid var(--border-strong);border-radius:100px;padding:12px 20px;display:flex;align-items:center;gap:10px;font-size:14px;box-shadow:var(--shadow-lg);animation:toastIn .3s cubic-bezier(.16,1,0.3,1);pointer-events:auto}
+.toast.success{border-color:var(--success)}
+.toast.error{border-color:var(--danger)}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.toast.leaving{animation:toastOut .3s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px) scale(.95)}}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:10px;border:2px solid var(--bg-app)}
+::selection{background:var(--accent-soft);color:var(--accent)}
+@media (max-width:768px){
+.navbar{padding:12px 16px}
+.nav-inner{flex-wrap:wrap;justify-content:center}
+.nav-tabs{gap:12px}
+.tab-circle{width:44px;height:44px}
+.nav-tab{font-size:10px}
+.container{padding:24px 16px 60px}
+.hero{padding:32px 12px 28px}
+.search-shortcut{display:none}
+.stat-card{padding:10px}
+.stat-value{font-size:20px}
+.wotd-bar{flex-wrap:wrap;justify-content:center;border-radius:20px;padding:12px 16px}
+.wotd-content{width:100%}
+.bento-grid{grid-template-columns:1fr}
+.phrase-grid{grid-template-columns:1fr}
+.quiz-category-grid{grid-template-columns:1fr;gap:14px}
+.quiz-options{grid-template-columns:1fr}
+.quiz-word{font-size:38px}
+.quiz-word.is-phrase{font-size:24px}
+.quiz-card{padding:28px 20px}
+.card-word{font-size:30px}
+.result-card{padding:20px}
+.card-actions-top{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="ambient-bg"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+<div id="loader-overlay" class="loader-overlay">
+  <div class="loader-brand"><div class="brand-mark">م</div><div class="loader-brand-text"><span data-i18n="brand.name">معجم الطالب</span><span class="dot">.</span></div></div>
+  <div class="loader-spinner"></div>
+  <p data-i18n="loader.desc">لتفعيل القاموس، يرجى اختيار ملفات البيانات من جهازك.</p>
+  <button class="btn-primary" onclick="document.getElementById('fileInput').click()" style="width:auto;padding:12px 30px">📂 <span data-i18n="loader.btn">اختيار الملفات</span></button>
+  <input type="file" id="fileInput" accept=".txt" multiple style="display:none">
+  <div class="loader-status" id="loader-status">Initializing...</div>
+</div>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="brand" id="brandHome"><div class="brand-mark">م</div><div class="brand-text"><span data-i18n="brand.name">معجم الطالب</span><span class="dot">.</span></div></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-page="home"><span class="tab-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><span data-i18n="nav.home">الرئيسية</span></button>
+      <button class="nav-tab" data-page="idioms"><span class="tab-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span data-i18n="nav.idioms">تعابير</span></button>
+      <button class="nav-tab" data-page="slang"><span class="tab-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></span><span data-i18n="nav.slang">عامية</span></button>
+      <button class="nav-tab" data-page="favorites"><span class="tab-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 20.9l1.1-6.5L2.6 9.8l6.5-.9z"/></svg><span class="nav-badge" id="favBadge" style="display:none">0</span></span><span data-i18n="nav.fav">المفضلة</span></button>
+      <button class="nav-tab" data-page="history"><span class="tab-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span data-i18n="nav.history">السجل</span></button>
+      <button class="nav-tab" data-page="quiz"><span class="tab-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg></span><span data-i18n="nav.quiz">اختبار</span></button>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn lang" id="langToggle">EN</button>
+      <button class="icon-btn" id="themeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="home" class="page active">
+    <div class="hero">
+      <h1 data-i18n="hero.title">اكتشف <span class="accent-word">المعاني</span><br>بلا حدود</h1>
+      <p data-i18n="hero.subtitle">قاموس إنجليزي-عربي ذكي يعرض معاني متعددة، تعريفاً دقيقاً، وأمثلة حية.</p>
+      <div class="search-wrapper">
+        <div class="search-box">
+          <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+          <input type="text" id="searchInput" data-i18n-ph="search.placeholder" placeholder="اكتب كلمة إنجليزية..." autocomplete="off">
+          <div class="search-shortcut"><kbd>⏎</kbd></div>
+          <button class="search-btn" id="searchBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+        </div>
+        <div class="suggestions" id="suggestions"></div>
+      </div>
+      <div class="wotd-bar" id="wotdBar">
+        <div class="wotd-label">✨ <span data-i18n="bento.wotd">كلمة اليوم</span></div>
+        <div class="wotd-content">
+          <div class="wotd-line1"><span class="wotd-word" id="wotdWord">···</span><span class="wotd-sep">—</span><span class="wotd-trans" id="wotdTrans">—</span></div>
+          <div class="wotd-def" id="wotdDef"></div>
+        </div>
+        <div class="wotd-actions">
+          <button onclick="speakWordOfDay()">🔊</button>
+          <button onclick="viewWordOfDay()">🔍</button>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label" data-i18n="stat.total">إجمالي الكلمات</div><div class="stat-value" id="totalWordsStat">—</div></div>
+        <div class="stat-card"><div class="stat-label" data-i18n="stat.favorites">المفضلة</div><div class="stat-value" id="favoritesStat">0</div></div>
+        <div class="stat-card"><div class="stat-label" data-i18n="stat.searches">البحثات</div><div class="stat-value" id="searchesStat">0</div></div>
+      </div>
+    </div>
+    <div id="results-container"></div>
+    <div class="bento-grid" id="bentoGrid">
+      <div class="bento-card" onclick="switchToPage('idioms')"><div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3 data-i18n="bento.idioms.title">التعابير</h3><p data-i18n="bento.idioms.desc">939 تعبير اصطلاحي</p></div>
+      <div class="bento-card" onclick="switchToPage('slang')"><div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><h3 data-i18n="bento.slang.title">العامية</h3><p data-i18n="bento.slang.desc">969 كلمة عامية</p></div>
+      <div class="bento-card" onclick="switchToPage('favorites')"><div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 20.9l1.1-6.5L2.6 9.8l6.5-.9z"/></svg></div><h3 data-i18n="bento.fav.title">المفضلة</h3><p data-i18n="bento.fav.desc">كلماتك المحفوظة</p></div>
+      <div class="bento-card" onclick="loadRandomWord()"><div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="9"/><path d="M8 8h.01M16 8h.01M8 16h.01M16 16h.01M12 12h.01"/></svg></div><h3 data-i18n="bento.random.title">كلمة عشوائية</h3><p data-i18n="bento.random.desc">اضغط لاكتشاف كلمة جديدة</p></div>
+    </div>
+  </div>
+
+  <div id="idioms" class="page">
+    <div class="page-head"><h2>🧩 <span data-i18n="idioms.title">التعابير الاصطلاحية</span></h2><span class="count-chip" id="idiomCount">0</span></div>
+    <p class="page-sub" data-i18n="idioms.sub">مستخرجة من IDIOM.txt</p>
+    <div class="filter-box">
+      <div class="search-box"><input type="text" id="idiomSearch" placeholder="ابحث عن تعبير (إنجليزي أو عربي)..." autocomplete="off"></div>
+    </div>
+    <div class="phrase-grid" id="idiomsList"></div>
+    <div class="load-more-wrap" id="idiomMoreWrap" style="display:none">
+      <span class="shown-count" id="idiomShownCount"></span>
+      <button class="btn-secondary" id="idiomMoreBtn" data-i18n="more">المزيد ⬇</button>
+    </div>
+  </div>
+
+  <div id="slang" class="page">
+    <div class="page-head"><h2>🗣️ <span data-i18n="slang.title">الكلمات العامية</span></h2><span class="count-chip" id="slangCount">0</span></div>
+    <p class="page-sub" data-i18n="slang.sub">مستخرجة من SLANG.txt</p>
+    <div class="filter-box">
+      <div class="search-box"><input type="text" id="slangSearch" placeholder="ابحث عن كلمة عامية (إنجليزي أو عربي)..." autocomplete="off"></div>
+    </div>
+    <div class="phrase-grid" id="slangsList"></div>
+    <div class="load-more-wrap" id="slangMoreWrap" style="display:none">
+      <span class="shown-count" id="slangShownCount"></span>
+      <button class="btn-secondary" id="slangMoreBtn" data-i18n="more">المزيد ⬇</button>
+    </div>
+  </div>
+
+  <div id="favorites" class="page">
+    <div class="list-section">
+      <div class="list-header"><h2 data-i18n="fav.title">كلماتك المحفوظة</h2><button class="clear-btn" id="clearFavBtn" data-i18n="fav.clear">مسح الكل</button></div>
+      <div id="favoritesList"></div>
+    </div>
+  </div>
+  <div id="history" class="page">
+    <div class="list-section">
+      <div class="list-header"><h2 data-i18n="hist.title">سجل البحث</h2><button class="clear-btn" id="clearHistBtn" data-i18n="hist.clear">مسح السجل</button></div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <!-- ============ ✅ صفحة الاختبار المفصلة ============ -->
+  <div id="quiz" class="page">
+    <div class="quiz-container">
+      
+      <!-- 🔹 شاشة اختيار القسم -->
+      <div id="quizSelection">
+        <div class="quiz-header">
+          <h2 data-i18n="quiz.choose.title">⚔️ اختبر مهاراتك</h2>
+          <p data-i18n="quiz.choose.subtitle">اختر القسم الذي تريد اختباره — كل اختبار يحتوي على 10 أسئلة</p>
+        </div>
+        <div class="quiz-category-grid">
+          <!-- بطاقة الكلمات المفردة -->
+          <div class="quiz-cat-card words" onclick="selectQuizCategory('words')">
+            <div class="quiz-cat-icon">📚</div>
+            <h3 data-i18n="quiz.cat.words.title">كلمات مفردة</h3>
+            <div class="en-title" data-i18n="quiz.cat.words.en">Single Words</div>
+            <div class="cat-desc" data-i18n="quiz.cat.words.desc">مفردات اللغة الإنجليزية الأساسية والمتقدمة</div>
+            <div class="quiz-cat-count"><span class="num" id="quizWordsCount">—</span> <span data-i18n="quiz.cat.unit.word">كلمة</span></div>
+            <button class="btn-start"><span data-i18n="quiz.cat.start">ابدأ الاختبار</span> →</button>
+          </div>
+          <!-- بطاقة التعابير -->
+          <div class="quiz-cat-card idioms" onclick="selectQuizCategory('idioms')">
+            <div class="quiz-cat-icon">🧩</div>
+            <h3 data-i18n="quiz.cat.idioms.title">التعابير</h3>
+            <div class="en-title" data-i18n="quiz.cat.idioms.en">Idioms</div>
+            <div class="cat-desc" data-i18n="quiz.cat.idioms.desc">التعابير الاصطلاحية الإنجليزية ومعانيها</div>
+            <div class="quiz-cat-count"><span class="num" id="quizIdiomsCount">—</span> <span data-i18n="quiz.cat.unit.idiom">تعبير</span></div>
+            <button class="btn-start"><span data-i18n="quiz.cat.start">ابدأ الاختبار</span> →</button>
+          </div>
+          <!-- بطاقة العامية -->
+          <div class="quiz-cat-card slang" onclick="selectQuizCategory('slang')">
+            <div class="quiz-cat-icon">🗣️</div>
+            <h3 data-i18n="quiz.cat.slang.title">العامية</h3>
+            <div class="en-title" data-i18n="quiz.cat.slang.en">Slang</div>
+            <div class="cat-desc" data-i18n="quiz.cat.slang.desc">كلمات وتعبيرات الشارع والمحادثة اليومية</div>
+            <div class="quiz-cat-count"><span class="num" id="quizSlangCount">—</span> <span data-i18n="quiz.cat.unit.slang">كلمة</span></div>
+            <button class="btn-start"><span data-i18n="quiz.cat.start">ابدأ الاختبار</span> →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🔹 شاشة الاختبار الفعلية -->
+      <div id="quizPlay" style="display:none;">
+        <div class="quiz-top-bar">
+          <button class="btn-back" onclick="backToQuizSelection()">
+            <span>←</span> <span data-i18n="quiz.back">رجوع</span>
+          </button>
+          <span id="quizCategoryTitle" class="quiz-cat-badge">—</span>
+        </div>
+        <div class="quiz-header">
+          <h2 id="quizPlayTitle" data-i18n="quiz.title">اختبار المفردات</h2>
+          <div class="quiz-progress">
+            <span id="quizProgressText">1 / 10</span>
+            <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:10%"></div></div>
+          </div>
+        </div>
+        <div class="quiz-stats-row">
+          <div class="quiz-stat"><div class="label" data-i18n="quiz.score">النقاط</div><div class="value" id="quizScore">0</div></div>
+          <div class="quiz-stat correct"><div class="label" data-i18n="quiz.correct">صحيح</div><div class="value" id="quizCorrect">0</div></div>
+          <div class="quiz-stat wrong"><div class="label" data-i18n="quiz.wrong">خطأ</div><div class="value" id="quizWrong">0</div></div>
+        </div>
+        <div class="quiz-card" id="quizCard">
+          <div class="quiz-question-label" id="quizQuestionLabel" data-i18n="quiz.q.label">ما ترجمة</div>
+          <div class="quiz-word" id="quizWord">—</div>
+          <div class="quiz-options" id="quizOptions"></div>
+          <button class="btn-primary" id="quizNextBtn"><span data-i18n="quiz.next">التالي</span> <span>→</span></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============ I18N ============ */
+const translations = {
+  ar: {
+    'brand.name':'معجم الطالب',
+    'loader.desc':'لتفعيل القاموس، يرجى اختيار ملفات البيانات من جهازك.','loader.btn':'اختيار الملفات',
+    'nav.home':'الرئيسية','nav.idioms':'تعابير','nav.slang':'عامية','nav.fav':'المفضلة','nav.history':'السجل','nav.quiz':'اختبار',
+    'hero.title':'اكتشف <span class="accent-word">المعاني</span><br>بلا حدود',
+    'hero.subtitle':'قاموس إنجليزي-عربي ذكي يعرض معاني متعددة، تعريفاً دقيقاً، وأمثلة حية.',
+    'search.placeholder':'اكتب كلمة إنجليزية...',
+    'stat.total':'إجمالي الكلمات','stat.favorites':'المفضلة','stat.searches':'البحثات',
+    'bento.wotd':'كلمة اليوم','bento.idioms.title':'التعابير','bento.idioms.desc':'939 تعبير اصطلاحي',
+    'bento.slang.title':'العامية','bento.slang.desc':'969 كلمة عامية',
+    'bento.fav.title':'المفضلة','bento.fav.desc':'كلماتك المحفوظة','bento.random.title':'كلمة عشوائية','bento.random.desc':'اضغط لاكتشاف كلمة جديدة',
+    'idioms.title':'التعابير الاصطلاحية','idioms.sub':'مستخرجة من IDIOM.txt',
+    'slang.title':'الكلمات العامية','slang.sub':'مستخرجة من SLANG.txt',
+    'more':'المزيد ⬇',
+    'fav.title':'كلماتك المحفوظة','fav.clear':'مسح الكل','fav.empty':'⭐ لا توجد كلمات محفوظة بعد',
+    'hist.title':'سجل البحث','hist.clear':'مسح السجل','hist.empty':'📜 لم تقم بأي بحث بعد',
+    'quiz.choose.title':'⚔️ اختبر مهاراتك','quiz.choose.subtitle':'اختر القسم الذي تريد اختباره — كل اختبار يحتوي على 10 أسئلة',
+    'quiz.cat.words.title':'كلمات مفردة','quiz.cat.words.en':'Single Words','quiz.cat.words.desc':'مفردات اللغة الإنجليزية الأساسية والمتقدمة','quiz.cat.unit.word':'كلمة',
+    'quiz.cat.idioms.title':'التعابير','quiz.cat.idioms.en':'Idioms','quiz.cat.idioms.desc':'التعابير الاصطلاحية الإنجليزية ومعانيها','quiz.cat.unit.idiom':'تعبير',
+    'quiz.cat.slang.title':'العامية','quiz.cat.slang.en':'Slang','quiz.cat.slang.desc':'كلمات وتعبيرات الشارع والمحادثة اليومية','quiz.cat.unit.slang':'كلمة',
+    'quiz.cat.start':'ابدأ الاختبار','quiz.back':'رجوع',
+    'quiz.title':'اختبار المفردات','quiz.score':'النقاط','quiz.correct':'صحيح','quiz.wrong':'خطأ',
+    'quiz.q.label':'ما ترجمة','quiz.q.label.idiom':'ما معنى التعبير','quiz.q.label.slang':'ما معنى الكلمة',
+    'quiz.next':'التالي','quiz.finished':'🎉 انتهى الاختبار!','quiz.final':'لقد أكملت الاختبار!','quiz.again':'🔄 العب مجدداً',
+    'quiz.play.words':'📚 اختبار الكلمات','quiz.play.idioms':'🧩 اختبار التعابير','quiz.play.slang':'🗣️ اختبار العامية',
+    'card.trans':'الترجمة','card.defs':'التعريفات','card.syn':'مرادفات','card.noDef':'📖 لا يوجد تعريف متاح حالياً',
+    'toast.saved':'✓ تمت الإضافة للمفضلة','toast.removed':'✗ تمت الإزالة','toast.cleared':'تم مسح القائمة',
+    'toast.noData':'⚠️ يرجى تحميل الملف أولاً','toast.needMin':'⚠️ يلزم 4 عناصر على الأقل لبدء الاختبار',
+    'empty.noResults':'🏛️ لا توجد نتائج مطابقة',
+    'wotd.loading':'جاري الترجمة...'
+  },
+  en: {
+    'brand.name':'Student Dictionary',
+    'loader.desc':'To activate the dictionary, select your data files.','loader.btn':'Select Files',
+    'nav.home':'Home','nav.idioms':'Idioms','nav.slang':'Slang','nav.fav':'Favorites','nav.history':'History','nav.quiz':'Quiz',
+    'hero.title':'Discover <span class="accent-word">Meanings</span><br>Beyond Limits',
+    'hero.subtitle':'A smart EN-AR dictionary with multiple meanings, definitions & examples.',
+    'search.placeholder':'Type an English word...',
+    'stat.total':'Total Words','stat.favorites':'Favorites','stat.searches':'Searches',
+    'bento.wotd':'Word of the Day','bento.idioms.title':'Idioms','bento.idioms.desc':'939 idioms',
+    'bento.slang.title':'Slang','bento.slang.desc':'969 slang terms',
+    'bento.fav.title':'Favorites','bento.fav.desc':'Your saved words','bento.random.title':'Random Word','bento.random.desc':'Click to discover',
+    'idioms.title':'Idioms','idioms.sub':'Extracted from IDIOM.txt',
+    'slang.title':'Slang','slang.sub':'Extracted from SLANG.txt',
+    'more':'More ⬇',
+    'fav.title':'Saved Words','fav.clear':'Clear All','fav.empty':'⭐ No saved words yet',
+    'hist.title':'Search History','hist.clear':'Clear History','hist.empty':'📜 No searches yet',
+    'quiz.choose.title':'⚔️ Test Your Skills','quiz.choose.subtitle':'Choose a category to test — each quiz has 10 questions',
+    'quiz.cat.words.title':'Single Words','quiz.cat.words.en':'Single Words','quiz.cat.words.desc':'Basic & advanced English vocabulary','quiz.cat.unit.word':'words',
+    'quiz.cat.idioms.title':'Idioms','quiz.cat.idioms.en':'Idioms','quiz.cat.idioms.desc':'English idiomatic expressions','quiz.cat.unit.idiom':'idioms',
+    'quiz.cat.slang.title':'Slang','quiz.cat.slang.en':'Slang','quiz.cat.slang.desc':'Street words & casual expressions','quiz.cat.unit.slang':'words',
+    'quiz.cat.start':'Start Quiz','quiz.back':'Back',
+    'quiz.title':'Vocabulary Quiz','quiz.score':'Score','quiz.correct':'Correct','quiz.wrong':'Wrong',
+    'quiz.q.label':'What\'s the translation of','quiz.q.label.idiom':'What\'s the meaning of','quiz.q.label.slang':'What\'s the meaning of',
+    'quiz.next':'Next','quiz.finished':'🎉 Quiz Finished!','quiz.final':'You completed the quiz!','quiz.again':'🔄 Play Again',
+    'quiz.play.words':'📚 Words Quiz','quiz.play.idioms':'🧩 Idioms Quiz','quiz.play.slang':'🗣️ Slang Quiz',
+    'card.trans':'Translation','card.defs':'Definitions','card.syn':'Synonyms','card.noDef':'📖 No definition available',
+    'toast.saved':'✓ Added to favorites','toast.removed':'✗ Removed','toast.cleared':'List cleared',
+    'toast.noData':'⚠️ Please load the file first','toast.needMin':'⚠️ Need at least 4 items to start',
+    'empty.noResults':'🏛️ No matching results',
+    'wotd.loading':'Translating...'
+  }
+};
+let currentLang = localStorage.getItem('lexicon_lang') || 'ar';
+function t(k){ return translations[currentLang][k] || k; }
+function applyLang(){
+  document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (translations[currentLang][k]) el.innerHTML = translations[currentLang][k]; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { const k = el.getAttribute('data-i18n-ph'); if (translations[currentLang][k]) el.placeholder = translations[currentLang][k]; });
+  document.getElementById('langToggle').textContent = currentLang === 'ar' ? 'EN' : 'AR';
+  updateQuizCounts();
+  updateQuizCategoryBadge();
+}
+document.getElementById('langToggle').addEventListener('click', () => { currentLang = currentLang === 'ar' ? 'en' : 'ar'; localStorage.setItem('lexicon_lang', currentLang); applyLang(); });
+
+/* ============ STATE ============ */
+let ALL_WORDS = [], IDIOMS = [], SLANG = [];
+const CACHE_KEY = 'lexicon_cache_v6';
+let wordCache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+function saveCache(){ localStorage.setItem(CACHE_KEY, JSON.stringify(wordCache)); }
+let favorites = JSON.parse(localStorage.getItem('lexicon_fav') || '[]');
+let history = JSON.parse(localStorage.getItem('lexicon_hist') || '[]');
+const PAGE_SIZE = 10;
+let idiomShown = PAGE_SIZE, slangShown = PAGE_SIZE;
+let lastIdiomResults = [], lastSlangResults = [];
+
+/* ============ LOADER ============ */
+const loaderOverlay = document.getElementById('loader-overlay');
+const loaderStatus = document.getElementById('loader-status');
+async function initApp(){
+  applyLang();
+  loaderStatus.textContent = 'Loading files...';
+  const jobs = ['meaningful_words.txt','IDIOM.txt','SLANG.txt'].map(f => fetch(f).then(r => { if(!r.ok) throw 0; return r.text(); }).then(txt => ({ f, txt })).catch(() => null));
+  const results = await Promise.all(jobs);
+  let any = false;
+  results.forEach(r => { if (r) { detectAndLoad(r.txt, r.f); any = true; } });
+  if (any) hideLoader();
+  else { loaderStatus.textContent = currentLang === 'ar' ? 'الملفات غير موجودة، يرجى اختيارها يدوياً.' : 'Files not found. Please select manually.'; document.getElementById('fileInput').addEventListener('change', handleFileSelect); }
+}
+function handleFileSelect(e){
+  const files = e.target.files; if (!files.length) return;
+  let pending = files.length;
+  for (const file of files) { const r = new FileReader(); r.onload = ev => { detectAndLoad(ev.target.result, file.name); if (--pending === 0) hideLoader(); }; r.readAsText(file); }
+}
+function detectAndLoad(text, name){
+  if (/Idiom\s*\|/i.test(text) || /idiom/i.test(name)) { const r = parseTable(text); if (r.length) IDIOMS = r; return; }
+  if (/\|\s*Term\s*\|/i.test(text) || /slang/i.test(name)) { const r = parseTable(text); if (r.length) SLANG = r; return; }
+  const w = parseWords(text); if (w.length) ALL_WORDS = w;
+}
+function parseWords(text){
+  return [...new Set(text.split(/\r?\n/).map(w => w.trim()).filter(w => w && w.length >= 2 && /[a-zA-Z]/.test(w)))];
+}
+function parseTable(text){
+  const out = [], seen = new Set();
+  for (const line of text.split(/\r?\n/)) {
+    const s = line.trim(); if (!s.startsWith('|')) continue;
+    const p = s.split('|').map(x => x.trim()); p.shift(); p.pop();
+    if (p.length < 3 || !/^\d+$/.test(p[0])) continue;
+    let en = p[1].replace(/\*\*/g, '').replace(/\*[^*]*\*/g, '').trim();
+    let ar = p[2].replace(/\*[^*]*\*/g, '').trim();
+    const note = p[3] || '';
+    if (!en || en === 'Idiom' || en === 'Term') continue;
+    if (ar === '-') ar = '';
+    const flag = note.includes('🇬🇧') ? '🇬🇧' : note.includes('🇺🇸') ? '🇺🇸' : note.includes('💬') ? '💬' : '';
+    const k = en.toLowerCase(); if (seen.has(k)) continue; seen.add(k);
+    out.push({ en, ar, flag });
+  }
+  return out;
+}
+function hideLoader(){
+  loaderOverlay.classList.add('hidden');
+  document.getElementById('totalWordsStat').textContent = ALL_WORDS.length ? ALL_WORDS.length.toLocaleString() : '—';
+  updateQuizCounts();
+  loadWordOfDay(); renderIdioms(true); renderSlang(true);
+}
+function updateQuizCounts(){
+  document.getElementById('quizWordsCount').textContent = ALL_WORDS.length ? ALL_WORDS.length.toLocaleString() : '0';
+  document.getElementById('quizIdiomsCount').textContent = IDIOMS.length ? IDIOMS.length.toLocaleString() : '0';
+  document.getElementById('quizSlangCount').textContent = SLANG.length ? SLANG.length.toLocaleString() : '0';
+}
+
+/* ============ APIs ============ */
+async function fetchDefinition(word){
+  try {
+    const res = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word));
+    if (!res.ok) throw new Error('no def');
+    const data = await res.json(); const entry = data[0];
+    const phonetic = entry.phonetic || ((entry.phonetics || []).map(p => p.text).find(Boolean)) || '';
+    const meaning = entry.meanings && entry.meanings[0];
+    let def = meaning && meaning.definitions && meaning.definitions[0];
+    if (entry.meanings) for (const m of entry.meanings) for (const d of (m.definitions || [])) if (d.example) { def = d; break; }
+    const meanings = (entry.meanings || []).slice(0, 3).map(m => ({ type: m.partOfSpeech || '', defs: (m.definitions || []).slice(0, 2).map(d => ({ text: d.definition || '', example: d.example || '' })), synonyms: (m.synonyms || []).slice(0, 4) }));
+    return { meanings, phonetic };
+  } catch(e) { return { meanings: [], phonetic: '' }; }
+}
+async function fetchTranslation(word){
+  try {
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ar`);
+    const data = await res.json(); const s = new Set();
+    if (data.responseData && data.responseData.translatedText) s.add(data.responseData.translatedText.trim());
+    if (data.matches) data.matches.forEach(m => { const tr = m.translation.trim(); if (tr && tr !== word && tr.length < 40 && !tr.includes('http')) s.add(tr); });
+    return Array.from(s).slice(0, 6);
+  } catch(e) { return []; }
+}
+const TYPE_AR = {noun:'اسم',verb:'فعل',adjective:'صفة',adverb:'ظرف',pronoun:'ضمير',preposition:'حرف جر',conjunction:'حرف عطف',interjection:'نداء',determiner:'محدد',article:'أداة'};
+const TYPE_EN = {noun:'Noun',verb:'Verb',adjective:'Adj',adverb:'Adv',pronoun:'Pron',preposition:'Prep',conjunction:'Conj',interjection:'Interj',determiner:'Det',article:'Art'};
+async function getWordData(word){
+  const key = word.toLowerCase();
+  if (wordCache[key] && wordCache[key].translation) return wordCache[key];
+  const [def, trans] = await Promise.all([fetchDefinition(word), fetchTranslation(word)]);
+  const data = { word, pos: def.meanings[0]?.type || '', phonetic: def.phonetic || '', meanings: def.meanings || [], translation: trans.length ? trans : ['—'] };
+  wordCache[key] = data; saveCache(); return data;
+}
+
+/* ============ RENDER ============ */
+function cssSafe(w){ return w.replace(/[^a-zA-Z0-9]/g,'_'); }
+function escJs(w){ return w.replace(/'/g,"\\'"); }
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+const ICON_STAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 20.9l1.1-6.5L2.6 9.8l6.5-.9z"/></svg>';
+const ICON_STAR_FILL = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 20.9l1.1-6.5L2.6 9.8l6.5-.9z"/></svg>';
+const ICON_SPEAK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+
+function cardSkeleton(word){
+  const id = cssSafe(word); const isFav = favorites.some(f => f.toLowerCase() === word.toLowerCase());
+  return `<div class="result-card" id="card-${id}">
+    <div class="card-top"><div class="card-word-wrap"><div class="card-word">${escHtml(word)}</div><span class="card-phonetic" id="phon-${id}"></span><span class="card-type" id="type-${id}">···</span></div>
+    <div class="card-actions-top"><button class="${isFav?'fav-active':''}" id="fav-${id}" onclick="toggleFav('${escJs(word)}')">${isFav?ICON_STAR_FILL:ICON_STAR}</button><button onclick="speakText('${escJs(word)}')">${ICON_SPEAK}</button></div></div>
+    <div class="translation-section"><div class="section-label">🇸 ${t('card.trans')}</div><div class="meaning-chips" id="trans-${id}"><span class="skeleton" style="width:80px;height:26px;border-radius:100px"></span></div></div>
+    <div class="section-label">📖 ${t('card.defs')}</div><div id="defs-${id}"><div class="definition-block"><span class="skeleton" style="width:90%;height:14px"></span></div></div>
+  </div>`;
+}
+function phraseCard(item, kind){
+  const badge = kind === 'idiom' ? '<span class="card-type">IDIOM</span>' : '<span class="card-type">SLANG</span>';
+  const flag = item.flag ? `<span style="font-size:14px">${item.flag}</span>` : '';
+  return `<div class="result-card">
+    <div class="card-top"><div class="card-word-wrap"><div class="card-word">${escHtml(item.en)}</div>${badge}${flag}</div>
+    <div class="card-actions-top"><button onclick="speakText('${escJs(item.en)}')">${ICON_SPEAK}</button></div></div>
+    <div class="meaning-chips"><span class="meaning-chip">🇸 ${escHtml(item.ar || '—')}</span></div>
+  </div>`;
+}
+async function renderResults(words){
+  const container = document.getElementById('results-container');
+  document.getElementById('bentoGrid').style.display = 'none';
+  container.innerHTML = '';
+  if (!words || words.length === 0) { container.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><h3>${t('empty.noResults')}</h3></div>`; return; }
+  container.innerHTML = words.map(cardSkeleton).join('');
+  const typeMap = currentLang === 'ar' ? TYPE_AR : TYPE_EN;
+  for (const w of words) {
+    const id = cssSafe(w);
+    getWordData(w).then(data => {
+      const tr = document.getElementById('trans-'+id); if (tr) tr.innerHTML = (Array.isArray(data.translation)?data.translation:[data.translation]).map(m => `<span class="meaning-chip">${escHtml(m)}</span>`).join('');
+      const ph = document.getElementById('phon-'+id); if (ph) ph.textContent = data.phonetic || '';
+      const ty = document.getElementById('type-'+id); if (ty) ty.textContent = typeMap[data.pos] || data.pos || (currentLang==='ar'?'كلمة':'Word');
+      const df = document.getElementById('defs-'+id);
+      if (df) { if (data.meanings && data.meanings.length) df.innerHTML = data.meanings.map(m => `<div class="definition-block"><span class="mg-type">${typeMap[m.type]||m.type||'Word'}</span><ol class="mg-defs">${m.defs.map(d => `<li>${escHtml(d.text)}${d.example?`<span class="mg-ex">"${escHtml(d.example)}"</span>`:''}</li>`).join('')}</ol>${m.synonyms&&m.synonyms.length?`<div class="mg-syn"><span class="syn-label">${t('card.syn')}:</span>${m.synonyms.map(s=>`<span class="syn-chip" onclick="lookupWord('${escJs(s)}')">${escHtml(s)}</span>`).join('')}</div>`:''}</div>`).join(''); else df.innerHTML = `<div class="definition-block"><span class="empty-defs">${t('card.noDef')}</span></div>`; }
+      const fv = document.getElementById('fav-'+id); if (fv) { const isFav = favorites.some(f => f.toLowerCase() === w.toLowerCase()); fv.classList.toggle('fav-active', isFav); fv.innerHTML = isFav ? ICON_STAR_FILL : ICON_STAR; }
+    });
+  }
+}
+
+function renderIdioms(reset){
+  if (reset) idiomShown = PAGE_SIZE;
+  const q = (document.getElementById('idiomSearch').value || '').toLowerCase().trim();
+  lastIdiomResults = IDIOMS.filter(i => !q || i.en.toLowerCase().includes(q) || i.ar.includes(q));
+  document.getElementById('idiomCount').textContent = lastIdiomResults.length;
+  const slice = lastIdiomResults.slice(0, idiomShown);
+  const grid = document.getElementById('idiomsList');
+  grid.innerHTML = slice.length ? slice.map(i => phraseCard(i, 'idiom')).join('') : `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><h3>${t('empty.noResults')}</h3></div>`;
+  document.getElementById('idiomShownCount').textContent = `${slice.length} / ${lastIdiomResults.length}`;
+  document.getElementById('idiomMoreWrap').style.display = lastIdiomResults.length > idiomShown ? 'block' : 'none';
+}
+document.getElementById('idiomMoreBtn').addEventListener('click', () => { idiomShown += PAGE_SIZE; renderIdioms(false); });
+document.getElementById('idiomSearch').addEventListener('input', () => renderIdioms(true));
+
+function renderSlang(reset){
+  if (reset) slangShown = PAGE_SIZE;
+  const q = (document.getElementById('slangSearch').value || '').toLowerCase().trim();
+  lastSlangResults = SLANG.filter(i => !q || i.en.toLowerCase().includes(q) || i.ar.includes(q));
+  document.getElementById('slangCount').textContent = lastSlangResults.length;
+  const slice = lastSlangResults.slice(0, slangShown);
+  const grid = document.getElementById('slangsList');
+  grid.innerHTML = slice.length ? slice.map(i => phraseCard(i, 'slang')).join('') : `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><h3>${t('empty.noResults')}</h3></div>`;
+  document.getElementById('slangShownCount').textContent = `${slice.length} / ${lastSlangResults.length}`;
+  document.getElementById('slangMoreWrap').style.display = lastSlangResults.length > slangShown ? 'block' : 'none';
+}
+document.getElementById('slangMoreBtn').addEventListener('click', () => { slangShown += PAGE_SIZE; renderSlang(false); });
+document.getElementById('slangSearch').addEventListener('input', () => renderSlang(true));
+
+/* ============ SEARCH ============ */
+const searchInput = document.getElementById('searchInput');
+const suggestionsDiv = document.getElementById('suggestions');
+function showSuggestions(query){
+  const q = query.toLowerCase();
+  const list = ALL_WORDS.filter(w => w.toLowerCase().startsWith(q)).slice(0, 8);
+  if (!list.length || !query) { suggestionsDiv.classList.remove('show'); return; }
+  suggestionsDiv.innerHTML = list.map(w => `<div class="suggestion-item" onclick="selectSuggestion('${escJs(w)}')"><span>${escHtml(w)}</span><span class="arrow">→</span></div>`).join('');
+  suggestionsDiv.classList.add('show');
+}
+function selectSuggestion(word){ searchInput.value = word; suggestionsDiv.classList.remove('show'); runSearch(word); }
+function lookupWord(w){ switchToPage('home'); searchInput.value = w; runSearch(w); }
+function runSearch(query){
+  const q = query.trim(); if (!q) return;
+  const ql = q.toLowerCase();
+  const exact = ALL_WORDS.find(w => w.toLowerCase() === ql);
+  renderResults(exact ? [exact] : ALL_WORDS.filter(w => w.toLowerCase().includes(ql)).slice(0, 12));
+  addHistory(q);
+}
+function addHistory(word){ history = history.filter(h => h.word.toLowerCase() !== word.toLowerCase()); history.unshift({ word, timestamp: Date.now() }); history = history.slice(0, 50); localStorage.setItem('lexicon_hist', JSON.stringify(history)); document.getElementById('searchesStat').textContent = history.length; }
+searchInput.addEventListener('input', e => showSuggestions(e.target.value));
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') { suggestionsDiv.classList.remove('show'); runSearch(searchInput.value); } });
+document.getElementById('searchBtn').addEventListener('click', () => { suggestionsDiv.classList.remove('show'); runSearch(searchInput.value); });
+document.addEventListener('click', e => { if (!e.target.closest('.search-wrapper')) suggestionsDiv.classList.remove('show'); });
+
+/* ============ WOTD ============ */
+function loadWordOfDay(){
+  if (!ALL_WORDS.length) return;
+  const day = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  const w = ALL_WORDS[day % ALL_WORDS.length];
+  document.getElementById('wotdWord').textContent = w;
+  document.getElementById('wotdTrans').textContent = t('wotd.loading');
+  getWordData(w).then(d => { document.getElementById('wotdTrans').textContent = '🇸 ' + (Array.isArray(d.translation)?d.translation[0]:d.translation); document.getElementById('wotdDef').textContent = d.meanings?.[0]?.defs?.[0]?.text || ''; });
+}
+function speakWordOfDay(){ const w = document.getElementById('wotdWord').textContent; if (w && w !== '···') speakText(w); }
+function viewWordOfDay(){ const w = document.getElementById('wotdWord').textContent; if (w && w !== '···') lookupWord(w); }
+
+/* ============ FAV / HIST ============ */
+function toggleFav(word){
+  const lower = word.toLowerCase(); const idx = favorites.findIndex(f => f.toLowerCase() === lower);
+  if (idx > -1) favorites.splice(idx, 1); else favorites.push(word);
+  localStorage.setItem('lexicon_fav', JSON.stringify(favorites));
+  document.getElementById('favoritesStat').textContent = favorites.length; updateFavBadge();
+  const b = document.getElementById('fav-'+cssSafe(word)); if (b) { const isFav = favorites.some(f => f.toLowerCase() === lower); b.classList.toggle('fav-active', isFav); b.innerHTML = isFav ? ICON_STAR_FILL : ICON_STAR; }
+}
+function updateFavBadge(){ const b = document.getElementById('favBadge'); if (favorites.length) { b.style.display = 'grid'; b.textContent = favorites.length; } else b.style.display = 'none'; }
+function renderFavorites(){
+  const c = document.getElementById('favoritesList');
+  if (!favorites.length) { c.innerHTML = `<div class="empty-state">${t('fav.empty')}</div>`; return; }
+  c.innerHTML = favorites.map(w => `<div class="list-item"><div><span class="word">${escHtml(w)}</span> <span class="trans" id="favtr-${cssSafe(w)}">···</span></div><button class="del-btn" onclick="removeFav('${escJs(w)}')">✕</button></div>`).join('');
+  favorites.forEach(w => getWordData(w).then(d => { const el = document.getElementById('favtr-'+cssSafe(w)); if (el) el.textContent = '- ' + (Array.isArray(d.translation)?d.translation[0]:d.translation); }));
+}
+function removeFav(word){ favorites = favorites.filter(f => f.toLowerCase() !== word.toLowerCase()); localStorage.setItem('lexicon_fav', JSON.stringify(favorites)); document.getElementById('favoritesStat').textContent = favorites.length; updateFavBadge(); renderFavorites(); }
+document.getElementById('clearFavBtn').addEventListener('click', () => { favorites = []; localStorage.setItem('lexicon_fav','[]'); document.getElementById('favoritesStat').textContent = 0; updateFavBadge(); renderFavorites(); showToast(t('toast.cleared'),'success'); });
+function renderHistory(){
+  const c = document.getElementById('historyList');
+  if (!history.length) { c.innerHTML = `<div class="empty-state">${t('hist.empty')}</div>`; return; }
+  c.innerHTML = history.map(h => `<div class="list-item" onclick="selectSuggestion('${escJs(h.word)}')"><div><span class="word">${escHtml(h.word)}</span></div><button class="del-btn" onclick="event.stopPropagation();removeHistory('${escJs(h.word)}')">✕</button></div>`).join('');
+}
+function removeHistory(word){ history = history.filter(h => h.word !== word); localStorage.setItem('lexicon_hist', JSON.stringify(history)); renderHistory(); }
+document.getElementById('clearHistBtn').addEventListener('click', () => { history = []; localStorage.setItem('lexicon_hist','[]'); renderHistory(); showToast(t('toast.cleared'),'success'); });
+function speakText(t){ if (!window.speechSynthesis) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=0.9; speechSynthesis.speak(u); }
+function showToast(msg, type='success'){ const c = document.getElementById('toastContainer'); const el = document.createElement('div'); el.className = `toast ${type}`; el.textContent = msg; c.appendChild(el); setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 300); }, 2500); }
+function loadRandomWord(){ if (!ALL_WORDS.length) return; lookupWord(ALL_WORDS[Math.floor(Math.random()*ALL_WORDS.length)]); }
+
+/* ============ ✅ QUIZ - مفصل بالأقسام ============ */
+let quizScore = 0, quizIndex = 0, quizQuestions = [], isQuizAnswered = false;
+let currentQuizCategory = 'words'; // 'words' | 'idioms' | 'slang'
+
+function pickRandom(arr, n){ return [...arr].sort(() => Math.random() - 0.5).slice(0, n); }
+
+function updateQuizCategoryBadge(){
+  const el = document.getElementById('quizCategoryTitle');
+  if (!el) return;
+  if (currentQuizCategory === 'words') el.textContent = t('quiz.play.words');
+  else if (currentQuizCategory === 'idioms') el.textContent = t('quiz.play.idioms');
+  else el.textContent = t('quiz.play.slang');
+}
+
+function selectQuizCategory(cat){
+  // التحقق من توفر البيانات
+  let sourceArr = cat === 'words' ? ALL_WORDS : (cat === 'idioms' ? IDIOMS : SLANG);
+  if (!sourceArr || sourceArr.length < 4) {
+    showToast(sourceArr.length === 0 ? t('toast.noData') : t('toast.needMin'), 'error');
+    return;
+  }
+  currentQuizCategory = cat;
+  document.getElementById('quizSelection').style.display = 'none';
+  document.getElementById('quizPlay').style.display = 'block';
+  document.getElementById('quizPlayTitle').textContent = 
+    cat === 'words' ? t('quiz.play.words') : 
+    cat === 'idioms' ? t('quiz.play.idioms') : t('quiz.play.slang');
+  document.getElementById('quizQuestionLabel').textContent = 
+    cat === 'words' ? t('quiz.q.label') : 
+    cat === 'idioms' ? t('quiz.q.label.idiom') : t('quiz.q.label.slang');
+  updateQuizCategoryBadge();
+  generateQuizForCategory(cat);
+}
+
+function backToQuizSelection(){
+  document.getElementById('quizSelection').style.display = 'block';
+  document.getElementById('quizPlay').style.display = 'none';
+}
+
+async function generateQuizForCategory(cat){
+  quizScore = 0; quizIndex = 0; isQuizAnswered = false;
+  document.getElementById('quizScore').textContent = '0';
+  document.getElementById('quizCorrect').textContent = '0';
+  document.getElementById('quizWrong').textContent = '0';
+  document.getElementById('quizNextBtn').style.display = 'flex';
+  
+  let sourceArr = cat === 'words' ? ALL_WORDS : (cat === 'idioms' ? IDIOMS : SLANG);
+  quizQuestions = pickRandom(sourceArr, Math.min(10, sourceArr.length));
+  renderQuizQuestion();
+}
+
+async function renderQuizQuestion(){
+  const card = document.getElementById('quizOptions');
+  const wordEl = document.getElementById('quizWord');
+  
+  if (quizIndex >= quizQuestions.length) {
+    wordEl.textContent = '🎉';
+    wordEl.classList.remove('is-phrase');
+    card.innerHTML = `<div style="grid-column:1/-1;text-align:center;font-size:22px;padding:20px">${t('quiz.final')}<br>🏆 ${quizScore} / ${quizQuestions.length}</div>`;
+    document.getElementById('quizNextBtn').style.display = 'none';
+    return;
+  }
+  
+  document.getElementById('quizProgressText').textContent = `${quizIndex+1} / ${quizQuestions.length}`;
+  document.getElementById('quizProgressFill').style.width = `${((quizIndex+1)/quizQuestions.length)*100}%`;
+  document.getElementById('quizNextBtn').style.display = 'flex';
+  
+  const item = quizQuestions[quizIndex];
+  
+  if (currentQuizCategory === 'words') {
+    // 🔹 اختبار الكلمات المفردة
+    wordEl.textContent = item;
+    wordEl.classList.remove('is-phrase');
+    card.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--text-muted)">...</div>`;
+    
+    const distractors = pickRandom(ALL_WORDS.filter(w => w.toLowerCase() !== item.toLowerCase()), 3);
+    const [cd, ...dd] = await Promise.all([getWordData(item), ...distractors.map(getWordData)]);
+    const correct = Array.isArray(cd.translation) ? cd.translation[0] : cd.translation;
+    
+    let opts = [correct, ...dd.map(d => Array.isArray(d.translation) ? d.translation[0] : d.translation)];
+    opts = [...new Set(opts)].filter(o => o && o !== '—');
+    while (opts.length < 4) opts.push('—');
+    opts = opts.sort(() => Math.random() - 0.5);
+    
+    card.innerHTML = opts.map(o => `<div class="quiz-opt" onclick="checkQuizAnswer('${escJs(o)}','${escJs(correct)}')">${escHtml(o)}</div>`).join('');
+  }
+  else {
+    // 🔹 اختبار التعابير أو العامية — البيانات محلية (asynchronous-free)
+    wordEl.textContent = item.en;
+    wordEl.classList.add('is-phrase');
+    
+    const sourceArr = currentQuizCategory === 'idioms' ? IDIOMS : SLANG;
+    const distractors = pickRandom(sourceArr.filter(i => i.en.toLowerCase() !== item.en.toLowerCase()), 3);
+    const correct = item.ar || '—';
+    
+    let opts = [correct, ...distractors.map(d => d.ar || '—')];
+    opts = [...new Set(opts)].filter(o => o && o !== '—' && o.trim().length > 0);
+    while (opts.length < 4) {
+      // أضف معنى عشوائي آخر من نفس الفئة
+      const extra = pickRandom(sourceArr, 1)[0];
+      if (extra && extra.ar && !opts.includes(extra.ar)) opts.push(extra.ar);
+      else opts.push('—');
+    }
+    opts = opts.slice(0, 4).sort(() => Math.random() - 0.5);
+    
+    card.innerHTML = opts.map(o => `<div class="quiz-opt" onclick="checkQuizAnswer('${escJs(o)}','${escJs(correct)}')">${escHtml(o)}</div>`).join('');
+  }
+  isQuizAnswered = false;
+}
+
+function checkQuizAnswer(sel, correct){
+  if (isQuizAnswered) return; isQuizAnswered = true;
+  document.querySelectorAll('.quiz-opt').forEach(el => {
+    el.classList.add('disabled');
+    if (el.textContent === correct) el.classList.add('correct');
+    if (el.textContent === sel && sel !== correct) el.classList.add('wrong');
+  });
+  if (sel === correct) {
+    quizScore++;
+    document.getElementById('quizScore').textContent = quizScore;
+    document.getElementById('quizCorrect').textContent = quizScore;
+  } else {
+    document.getElementById('quizWrong').textContent = (+document.getElementById('quizWrong').textContent) + 1;
+  }
+}
+
+document.getElementById('quizNextBtn').addEventListener('click', () => { quizIndex++; renderQuizQuestion(); });
+
+/* ============ NAV / THEME ============ */
+function switchToPage(id){
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === id));
+  if (id === 'favorites') renderFavorites();
+  if (id === 'history') renderHistory();
+  if (id === 'quiz') {
+    // عند فتح صفحة الاختبار، اعرض شاشة الاختيار دائماً
+    document.getElementById('quizSelection').style.display = 'block';
+    document.getElementById('quizPlay').style.display = 'none';
+    updateQuizCounts();
+  }
+  if (id === 'idioms') renderIdioms(true);
+  if (id === 'slang') renderSlang(true);
+  if (id === 'home') { document.getElementById('results-container').innerHTML = ''; document.getElementById('bentoGrid').style.display = 'grid'; }
+}
+document.querySelectorAll('.nav-tab').forEach(b => b.addEventListener('click', () => switchToPage(b.dataset.page)));
+document.getElementById('brandHome').addEventListener('click', () => switchToPage('home'));
+document.getElementById('themeToggle').addEventListener('click', function(){ const h = document.documentElement; const l = h.getAttribute('data-theme') === 'light'; h.setAttribute('data-theme', l ? 'dark' : 'light'); this.textContent = l ? '🌙' : '☀️'; localStorage.setItem('lexicon_theme', l ? 'dark' : 'light'); });
+const savedTheme = localStorage.getItem('lexicon_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('themeToggle').textContent = savedTheme === 'light' ? '☀️' : '🌙';
+
+initApp();
+</script>
+</body>
+</html>
